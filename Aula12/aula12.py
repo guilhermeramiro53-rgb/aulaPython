@@ -33,7 +33,7 @@ leitura_excel.loc[nova_linha,"altura"] = dados["altura"]
 #print(leitura_excel["nome"])
 
 # apagar linhas de um planilha 
-# leitura_excel = leitura_excel.drop(2)
+leitura_excel = leitura_excel.drop(2)
 
 
 # leitura_excel.loc[1,"nome"] = dados["nome"]
