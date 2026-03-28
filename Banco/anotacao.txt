@@ -1,0 +1,9 @@
+        if operacao == 1:
+            valor_saque = float(input("Valor do saque: R$ "))
+        if valor_saque <= extrato_cliente :
+            print("Valor invalido!")
+        elif valor_saque > extrato_cliente :
+            print("Saldo insuficiente.")
+        else:
+            extrato_cliente -= valor_saque
+            print("Saque realizado com sucesso!")

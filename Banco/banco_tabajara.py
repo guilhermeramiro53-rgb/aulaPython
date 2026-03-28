@@ -99,3 +99,25 @@ elif opcao == 2:
         print(f"  Agencia :{agencia_cliente}")
         print(f"  Tipo    :{tipo_cliente}")
         print(f"  Saldo   :R${extrato_cliente}")
+
+        extrato_cliente = conta.iloc[0]["Extrato"]
+
+# Menu de operações
+    while True:
+        print("\n--- O que deseja fazer? ---")
+        print("1 - Saque")
+        print("2 - Depósito")
+        print("3 - Saldo")
+        print("0 - Sair")
+
+        operacao = int(input("Escolha uma opção: "))
+        if operacao == 1:
+            print("Opção 1")
+        elif operacao == 2:
+            print("Opção 2")
+        elif operacao == 3:
+            print("Opção 3")
+        elif operacao == 0:
+            break
+
+
