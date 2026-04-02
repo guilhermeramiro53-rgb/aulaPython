@@ -5,9 +5,9 @@ caminho_excel = "Banco\Base_BANCO_TABAJARA.xlsx"
 
 # Carregar ou criar o DataFrame
 if os.path.exists("Banco\Base_BANCO_TABAJARA.xlsx"):
-    df = pd.read_excel("Banco\Base_BANCO_TABAJARA.xlsx",dtype={'CPF':str})
+    df = pd.read_excel("Banco\Base_BANCO_TABAJARA.xlsx",dtype={'CPF':str, 'Extrato':float})
 else:
-    df = pd.DataFrame(columns=["numero_conta", "nome", "CPF", "Tipo_conta"])
+    df = pd.DataFrame(columns=["numero_conta", "nome", "CPF", "Tipo_conta","Extrato"])
 def gerar_numero_conta(df):
     if df.empty or "numero_conta" not in df.columns:
         return 1
@@ -43,6 +43,7 @@ if opcao == 1:
         numero_conta = 0
     else:
         df["numero_conta"] = df["numero_conta"].astype(int)
+        
         numero_conta = df["numero_conta"].max() + 1
 
     # - agencia = será gerado de forma sequencial começando do 400 até 700
@@ -89,6 +90,7 @@ elif opcao == 2:
     if conta.empty:
         print("Conta não encontrada. CPF invalido.")
     else:
+        index_conta = int(conta.index[0])
         nome_cliente = conta.iloc[0]["nome"]
         agencia_cliente = conta.iloc[0]["Agencia"]
         tipo_cliente = conta.iloc[0]["Tipo_conta"]
@@ -103,21 +105,43 @@ elif opcao == 2:
         extrato_cliente = conta.iloc[0]["Extrato"]
 
 # Menu de operações
-    while True:
-        print("\n--- O que deseja fazer? ---")
-        print("1 - Saque")
-        print("2 - Depósito")
-        print("3 - Saldo")
-        print("0 - Sair")
+while True:
+    print("\n--- O que deseja fazer? ---")
+    print("1 - Saque")
+    print("2 - Depósito")
+    print("3 - Saldo")
+    print("0 - Sair")
 
-        operacao = int(input("Escolha uma opção: "))
-        if operacao == 1:
-            print("Opção 1")
-        elif operacao == 2:
-            print("Opção 2")
-        elif operacao == 3:
-            print("Opção 3")
-        elif operacao == 0:
-            break
+    operacao = int(input("Escolha uma opção: "))
 
+    if operacao == 1:
+        Valor_saque = float(input("Digite o valor: "))
+
+        if Valor_saque <= 0:                    # ✅ Corrigido: elif → if
+            print("Valor inválido!")
+        elif Valor_saque > extrato_cliente:     # ✅ Corrigido: agora está dentro do if operacao == 1
+            print("Saldo insuficiente!")
+        else:
+            extrato_cliente -= Valor_saque
+            df.loc[index_conta, "extrato"] = extrato_cliente  # ✅ Corrigido: índice correto
+            df.to_excel("Banco\Base_BANCO_TABAJARA.xlsx", index=False)
+            print(f"Saque de R$ {Valor_saque:.2f} realizado com sucesso!")
+
+    elif operacao == 2:
+        Valor_deposito = float(input("Digite o valor: "))
+        final = extrato_cliente + Valor_deposito
+        df.loc[index_conta, "Extrato"] = final  
+        df.to_excel("Banco\Base_BANCO_TABAJARA.xlsx", index=False)
+        print(f"Deposito de R$ {Valor_deposito:.2f} realizado com sucesso!")
+
+            
+    elif operacao == 3:
+        print(f"Saldo atual: R$ {extrato_cliente:.2f}")
+
+    elif operacao == 0:
+        print("Encerrando...")
+        break
+
+    else:
+        print("Opção inválida!")
 
